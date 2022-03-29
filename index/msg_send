@@ -1,0 +1,5 @@
+{'send_ip':xxx.xxx.xxx.xxx,'receive_ip':xxx.xxx.xxx.xxx,'msg':'xxx','system':xxx-xxx,'instructions':'xxx/msg','command':'xxx/None/close'}
+
+{'send_ip':'server','receive_ip':xxx.xxx.xxx.xxx,'msg':'xxx','system':xxx-xxx,'instructions':'xxx/msg','command':'xxx/None'}
+{'send_ip':'server','receive_ip':'everyone','msg':'xxx','system':xxx-xxx,'instructions':'xxx/msg','command':'xxx/None'}
+{'send_ip':xxx.xxx.xxx.xxx,'receive_ip':xxx.xxx.xxx.xxx,'msg':'xxx','system':xxx-xxx,'instructions':'xxx/msg','command':'xxx/None'}

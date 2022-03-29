@@ -140,10 +140,8 @@ class instructions():
 # 服务器    
 class server():
     def server_setup(host,port,listen_number):
-        global s
-        s = socket.socket()
-        s.bind((str(host), int(port))) # 绑定ip和端口
-        s.listen(listen_number) # 等待客户端连接
+        import server_setup
+        server_setup.setup('127.0.0.1',3030,5)
     def server_run():
         global msg_server_run
         global file_name

@@ -225,3 +225,9 @@ c.clisten.clisten_setup(host,port) # host {String},port {Int}
 c.clisten.clisten_start()
 不要则不执行
 '''
+def q():
+    input(':')
+def w():
+    print('w')
+q()
+w()
