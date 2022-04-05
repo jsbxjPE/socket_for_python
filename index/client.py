@@ -3,12 +3,20 @@ import os
 import platform
 from subprocess import run
 import ast
+import tkinter
 
 global cmd_open
 global intranet_ip
 global system
 global msg_client_run
 global c
+global msg_tk
+global receive_ip
+
+receive_ip = '127.0.0.1'
+
+msg_tk = tkinter.Tk()
+msg_tk.title('msg')
 
 msg_client_run = False
 cmd_open = False
@@ -39,6 +47,27 @@ def run():
     global intranet_ip
     global system
     global msg_client_run
+    global receive_ip
     # print('run client !!!')
     while msg_client_run:
-        
+        msg_input = input('msg : ')
+        if msg_input == '/server_stop':
+            msg_data = {'send_ip':intranet_ip,'receive_ip':'server','msg':'','system':system,'instructions':'stop server','command':None}
+            c.send(str(msg_data).encode('utf-8'))
+            import os
+            print('server stop ...')
+            os._exit(0)
+        elif msg_input == '/exit':
+            msg_data = {'send_ip':intranet_ip,'receive_ip':'server','msg':'','system':system,'instructions':'user exit','command':None}
+            c.send(str(msg_data).encode('utf-8'))
+            import os
+            print('msg stop ...')
+            os._exit(0)
+        elif msg_input == '/rcmd':
+            msg_data = {'send_ip':intranet_ip,'receive_ip':'server','msg':'','system':system,'instructions':'cmd','command':None}
+            c.send(str(msg_data).encode('utf-8'))
+            print('open command line ...')
+        elif msg_input == '/scmd':
+            msg_data = {'send_ip':intranet_ip,'receive_ip':'server','msg':'','system':system,'instructions':'stop cmd','command':None}
+            c.send(str(msg_data).encode('utf-8'))
+            print('close command line ...')

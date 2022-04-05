@@ -1,6 +1,6 @@
 import tkinter
 import tkinter.messagebox
-import sys
+import os
 import threading
 from unicodedata import name
 import uuid
@@ -58,6 +58,7 @@ def server_run_tk(tk_setup):
     import server
     server.run(tk_setup)
 
+"""
 def server_run_join(sahi,servername,host,port,server_host):
     print('server join ...')
     c = socket.socket()
@@ -68,7 +69,9 @@ def server_run_join(sahi,servername,host,port,server_host):
     msg = str({'join':True,'uuid':uid,'name':servername,'host':host,'port':port})
     print(msg)
     c.send(msg.encode('utf-8'))
+"""
 
+"""
 def server_exit_tk(exit):
     print('server exit tk start ...')
     root = tkinter.Tk()
@@ -78,6 +81,7 @@ def server_exit_tk(exit):
     root.mainloop()
 def server_exit_tk():
     sys.exit('quit for tk')
+"""
 
 def server_run_ok():
     global server_run_ma
@@ -90,23 +94,20 @@ def server_run_ok():
     server_run_yes = tkinter.Button(server_tk, text=" run ", width=20, height=2, state = tkinter.DISABLED)
     server_run_yes.pack()
     server_exit_ma.destroy()
-    server_exit_yes = tkinter.Button(server_tk, text=" quit ", width=20, height=2, state = tkinter.DISABLED)
+    server_exit_yes = tkinter.Button(server_tk, text=" quit ", width=20, height=2, command = server_exit_ok)
     server_exit_yes.pack()
     tkinter.messagebox.showinfo(title = 'server run info', message = 'run ok !!!')
     sahi = 'DSaj3#@$RTHuiyu32dFG4@#$@eiuSDFRqydgiu#$?>DG<"Fger]fd[fdGR}dfg{r"Srt23rggrerG'
     server_host = '192.168.43.174'
     t1 = threading.Thread(target=server_run_tk, args=(tk_setup,))
-    t2 = threading.Thread(target=server_run_join, args=(sahi,servername,host,port,server_host,))
+    #t2 = threading.Thread(target=server_run_join, args=(sahi,servername,host,port,server_host,))
     #t3 = threading.Thread(target=server_exit_tk, args=('exit',))
-    t2.start()
+    #t2.start()
     #t3.start()
     t1.start()
 
 def server_exit_ok():
-    global server_tk
-    server_tk.quit()
-    server_tk.destroy()
-    sys.exit()
+    os._exit(0)
 
 server_tk = tkinter.Tk()
 
@@ -145,6 +146,3 @@ server_exit = tkinter.Button(server_tk, text=" quit ", width=20, height=2, comma
 server_exit.pack()
 
 server_tk.mainloop()
-
-#使用server_run.txt
-#来启动server

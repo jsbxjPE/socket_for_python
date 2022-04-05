@@ -3,12 +3,21 @@ import ast
 
 global s
 global msg_server_run
+global intranet_ip
 
 msg_server_run = False
 
 def setup(host,port,listen_number):
     global s
     global msg_server_run
+    global intranet_ip
+
+    # 获取内网地址
+    ip = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    ip.connect(('8.8.8.8', 80))
+    intranet_ip = ip.getsockname()[0] # 设置ip地址
+    ip.close()
+
     s = socket.socket()
     s.bind((str(host), int(port))) # 绑定ip和端口
     s.listen(int(listen_number)) # 等待客户端连接
@@ -33,6 +42,7 @@ def run(tk_setup):
                     system = data['system']
                     msg_instructions = data['instructions']
                     command = data['command']
+                    server_path = data['server_path']
 
                     if msg_instructions == 'stop server': # 停止服务器
                         msg_server_run = False
@@ -68,6 +78,20 @@ def run(tk_setup):
                             msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':send_ip + ' 执行命令时错误','system':system,'instructions':'command','command':'error'}
                             print('{} error executing command'.format(send_ip))
                             c.send(str(msg_data).encode('utf-8'))
+                    elif msg_instructions == '_ftp': # servre开启ftp
+                        global intranet_ip
+                        from server_ftp import start_ftp_server
+                        from random import randint
+                        from uap import user
+                        from uap import password
+                        u = user()
+                        p = password()
+                        po = randint(3000,8000)
+                        msg_data = {'send_ip':'server','receive_ip':send_ip,'msg':'ftp://{}:{}   user : {}   password : {}'.format(intranet_ip,po,u,p),'system':system,'instructions':'ftp_','command':None}
+                        print('{} ... ftp://{}:{}  user : {}  password : {}'.format(send_ip,intranet_ip,po,u,p))
+                        c.send(str(msg_data).encode('utf-8'))
+
+                        start_ftp_server(intranet_ip,po,u,p,server_path)
                     elif msg_instructions == 'msg': # 发送消息
                         msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':msg,'system':system,'instructions':'msg','command':None}
                         print('{} to {} : {}'.format(send_ip,receive_ip,msg))
