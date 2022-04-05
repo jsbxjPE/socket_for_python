@@ -24,10 +24,10 @@ def setup(host,port,listen_number):
     msg_server_run = True
     return True
 
-def run(tk_setup):
+def run():
     global s
     global msg_server_run
-    if not tk_setup:
+    if msg_server_run == False:
         print('server setup !!!')
     else:
         print('server run !!!')
@@ -70,7 +70,7 @@ def run(tk_setup):
                             msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':send_ip + ' 命令执行成功','system':system,'instructions':'command','command':'ok'}
                             print('{} wants {} to execute the command {}, {} say "ok"'.format(receive_ip,send_ip,command,send_ip))
                             c.send(str(msg_data).encode('utf-8'))
-                        elif command or command == None: # 发送命令者
+                        elif command == None or '': # 发送命令者
                             msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':send_ip + ' 没有键入命令','system':system,'instructions':'command','command':'no'}
                             print('{} no output command'.format(send_ip))
                             c.send(str(msg_data).encode('utf-8'))
@@ -78,8 +78,11 @@ def run(tk_setup):
                             msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':send_ip + ' 执行命令时错误','system':system,'instructions':'command','command':'error'}
                             print('{} error executing command'.format(send_ip))
                             c.send(str(msg_data).encode('utf-8'))
+                    elif msg_instructions == 'run':
+                            msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':send_ip + ' 想让' + intranet_ip +'执行命令 : ' + command,'system':system,'instructions':'command','command':command}
+                            print('{} want to {} command {}'.format(send_ip,intranet_ip,command))
+                            c.send(str(msg_data).encode('utf-8'))
                     elif msg_instructions == '_ftp': # servre开启ftp
-                        global intranet_ip
                         from server_ftp import start_ftp_server
                         from random import randint
                         from uap import user
@@ -90,12 +93,14 @@ def run(tk_setup):
                         msg_data = {'send_ip':'server','receive_ip':send_ip,'msg':'ftp://{}:{}   user : {}   password : {}'.format(intranet_ip,po,u,p),'system':system,'instructions':'ftp_','command':None}
                         print('{} ... ftp://{}:{}  user : {}  password : {}'.format(send_ip,intranet_ip,po,u,p))
                         c.send(str(msg_data).encode('utf-8'))
-
-                        start_ftp_server(intranet_ip,po,u,p,server_path)
+                        import threading
+                        t1 = threading.Thread(target=start_ftp_server(intranet_ip,po,u,p,server_path))
+                        t1.start()
                     elif msg_instructions == 'msg': # 发送消息
-                        msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':msg,'system':system,'instructions':'msg','command':None}
-                        print('{} to {} : {}'.format(send_ip,receive_ip,msg))
-                        c.send(str(msg_data).encode('utf-8'))
+                        if not (command == None or ''):
+                            msg_data = {'send_ip':send_ip,'receive_ip':receive_ip,'msg':msg,'system':system,'instructions':'msg','command':None}
+                            print('{} to {} : {}'.format(send_ip,receive_ip,msg))
+                            c.send(str(msg_data).encode('utf-8'))
                 except Exception as e:
                     print(repr(e))
                     #print(repr(e)) # 输出错误信息

@@ -71,3 +71,10 @@ def run():
             msg_data = {'send_ip':intranet_ip,'receive_ip':'server','msg':'','system':system,'instructions':'stop cmd','command':None}
             c.send(str(msg_data).encode('utf-8'))
             print('close command line ...')
+        elif '/run ' == msg_input:
+            msg_data = {'send_ip':intranet_ip,'receive_ip':receive_ip,'msg':'','system':system,'instructions':'run','command':msg_input.split('/run ')}
+            c.send(str(msg_data).encode('utf-8'))
+            print('close command line ...')
+        else:
+            msg_data = {'send_ip':intranet_ip,'receive_ip':receive_ip,'msg':msg_input,'system':system,'instructions':None,'command':None}
+            c.send(str(msg_data).encode('utf-8'))

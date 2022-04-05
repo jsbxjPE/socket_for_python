@@ -5,6 +5,7 @@ import threading
 from unicodedata import name
 import uuid
 import socket
+import server
 
 global server_run_ma
 global server_exit_ma
@@ -33,7 +34,6 @@ def server_setup_ok():
     listen_number = server_number.get()
     print([servername,host,port,listen_number])
     try:
-        import server
         if '7794' == port:
             tkinter.messagebox.showinfo(title = 'server setup error', message = 'port error !!!')
         elif server.setup(host,port,listen_number):
@@ -54,9 +54,8 @@ def server_setup_ok():
         print(str(e))
         tkinter.messagebox.showerror(title = 'server setup error', message = 'host or port or linsten_number error')
 
-def server_run_tk(tk_setup):
-    import server
-    server.run(tk_setup)
+def server_run_tk():
+    server.run()
 
 """
 def server_run_join(sahi,servername,host,port,server_host):
@@ -99,7 +98,7 @@ def server_run_ok():
     tkinter.messagebox.showinfo(title = 'server run info', message = 'run ok !!!')
     sahi = 'DSaj3#@$RTHuiyu32dFG4@#$@eiuSDFRqydgiu#$?>DG<"Fger]fd[fdGR}dfg{r"Srt23rggrerG'
     server_host = '192.168.43.174'
-    t1 = threading.Thread(target=server_run_tk, args=(tk_setup,))
+    t1 = threading.Thread(target=server_run_tk)
     #t2 = threading.Thread(target=server_run_join, args=(sahi,servername,host,port,server_host,))
     #t3 = threading.Thread(target=server_exit_tk, args=('exit',))
     #t2.start()
